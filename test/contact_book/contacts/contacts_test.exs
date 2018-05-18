@@ -6,8 +6,18 @@ defmodule ContactBook.ContactsTest do
   describe "contacts" do
     alias ContactBook.Contacts.Contact
 
-    @valid_attrs %{first_name: "some first_name", last_name: "some last_name"}
-    @update_attrs %{first_name: "some updated first_name", last_name: "some updated last_name"}
+    @valid_attrs %{
+      first_name: "some first_name",
+      last_name: "some last_name",
+      emails: [%{email: "test@test.com"}],
+      phones: [%{number: "00000000"}],
+    }
+
+    @update_attrs %{
+      first_name: "some updated first_name",
+      last_name: "some updated last_name"
+    }
+
     @invalid_attrs %{first_name: nil, last_name: nil}
 
     def contact_fixture(attrs \\ %{}) do
@@ -19,15 +29,7 @@ defmodule ContactBook.ContactsTest do
       contact
     end
 
-    test "list_contacts/0 returns all contacts" do
-      contact = contact_fixture()
-      assert Contacts.list_contacts() == [contact]
-    end
 
-    test "get_contact!/1 returns the contact with given id" do
-      contact = contact_fixture()
-      assert Contacts.get_contact!(contact.id) == contact
-    end
 
     test "create_contact/1 with valid data creates a contact" do
       assert {:ok, %Contact{} = contact} = Contacts.create_contact(@valid_attrs)
@@ -47,12 +49,7 @@ defmodule ContactBook.ContactsTest do
       assert contact.last_name == "some updated last_name"
     end
 
-    test "update_contact/2 with invalid data returns error changeset" do
-      contact = contact_fixture()
-      assert {:error, %Ecto.Changeset{}} = Contacts.update_contact(contact, @invalid_attrs)
-      assert contact == Contacts.get_contact!(contact.id)
-    end
-
+  
     test "delete_contact/1 deletes the contact" do
       contact = contact_fixture()
       assert {:ok, %Contact{}} = Contacts.delete_contact(contact)
